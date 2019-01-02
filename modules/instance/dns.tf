@@ -40,7 +40,7 @@ module "configure_additional_dns" {
 }
 
 module "apiserver_record" {
-  source = "./../dns"
+  source = "./../dns/current"
 
   config = "${var.dns}"
 
@@ -52,7 +52,7 @@ module "apiserver_record" {
 }
 
 module "ingress_record" {
-  source = "./../dns"
+  source = "./../dns/current"
 
   config = "${var.dns}"
 
@@ -65,7 +65,7 @@ module "ingress_record" {
 }
 
 module "bastion_record" {
-  source = "./../dns"
+  source = "./../dns/current"
 
   config = "${var.dns}"
 
@@ -77,7 +77,7 @@ module "bastion_record" {
 }
 
 module "identity_record" {
-  source = "./../dns"
+  source = "./../dns/current"
 
   config = "${var.dns}"
 
@@ -89,7 +89,7 @@ module "identity_record" {
 }
 
 module "dns_records" {
-  source = "./../dns"
+  source = "./../dns/current"
 
   config = "${var.dns}"
 
