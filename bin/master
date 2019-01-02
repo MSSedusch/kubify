@@ -135,8 +135,8 @@ doPrepare()
   rm -f terraform/variants/current
   ln -s "$VARIANT" terraform/variants/current
 
-  rm -f dns
-  ln -s terraform/modules/dns/$DNS_TYPE terraform/modules/dns/current
+  rm -f terraform/modules/dns/current
+  ln -sr terraform/modules/dns/azuredns/ terraform/modules/dns/current
 }
 
 doTF()
