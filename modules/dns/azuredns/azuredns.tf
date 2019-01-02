@@ -20,12 +20,11 @@ variable "name_count" {
 }
 variable "target" {
   type = "string"
+  default = ""
 }
 variable "targets" {
+  type = "list"
   default = []
-}
-variable "type" {
-  type = "string"
 }
 variable "name" {
   type = "string"
@@ -34,6 +33,10 @@ variable "name" {
 variable "names" {
   type = "list"
   default = [ ]
+}
+
+variable "type" {
+  type = "string"
 }
 variable "ttl" {
   default = 300
