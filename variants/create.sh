@@ -81,18 +81,8 @@ variable "etcd_backup" {
 variable "dns" {
   type = "map"
 }
-variable "route53_access_key" {
-  default = ""
-}
-variable "route53_secret_key" {
-  default = ""
-}
-variable "route53_hosted_zone_id" {
-  default = ""
-}
 locals {
-  hosted_zone_id = "\${var.route53_hosted_zone_id == "" ? lookup(var.dns, "hosted_zone_id", "") : var.route53_hosted_zone_id}"
-  dns = "\${merge(var.dns, map("hosted_zone_id", local.hosted_zone_id))}"
+  dns = "\${var.dns}"
 }
 
 module "route53" {
@@ -101,9 +91,6 @@ module "route53" {
     region = "us-east-1"
   }
   access_info = "\${local.dns}"
-
-  access_key = "\${var.route53_access_key}"
-  secret_key = "\${var.route53_secret_key}"
 }
 
 module "dns" {
@@ -117,13 +104,6 @@ module "s3_etcd_backup" {
   source = "../../modules/access/aws"
   defaults = "\${module.route53.access_info}"
   access_info = "\${var.etcd_backup}"
-}
-
-provider "aws" {
-  alias      = "route53"
-  access_key = "\${module.route53.access_key}"
-  secret_key = "\${module.route53.secret_key}"
-  region     = "\${module.route53.region}"
 }
 provider "aws" {
   alias      = "s3_etcd_backup"

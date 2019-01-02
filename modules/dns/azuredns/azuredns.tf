@@ -86,7 +86,7 @@ module "dns" {
 
 provider "azurerm" {
   alias     = "azuredns"
-  version = "1.20.0"
+  version = "0.1.5"
   tenant_id = "${module.azuredns.tenant_id}"
   subscription_id = "${module.azuredns.subscription_id}"
   client_id = "${module.azuredns.client_id}"
@@ -96,13 +96,11 @@ provider "azurerm" {
 
 module "azuredns_zone_name" {
   source = "../../configurable"
-  optional = "${! var.active}"
   value  = "${lookup(var.config,"zone_name")}"
 }
 
 module "azuredns_resource_group_name" {
   source = "../../configurable"
-  optional = "${! var.active}"
   value  = "${lookup(var.config,"resource_group_name")}"
 }
 
