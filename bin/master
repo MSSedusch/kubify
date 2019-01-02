@@ -136,9 +136,9 @@ doPrepare()
   ln -s "$VARIANT" terraform/variants/current
 
   rm -f dns
-  ln -s modules/dns/$DNS_TYPE dns
+  ln -s terraform/modules/dns/$DNS_TYPE dns
   # OSX compat
-  ln -s "$DNS_TYPE" modules/dns/$DNS_TYPE
+  ln -s "$DNS_TYPE" terraform/modules/dns/$DNS_TYPE
 }
 
 doTF()
