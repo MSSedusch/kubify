@@ -134,6 +134,11 @@ doPrepare()
   cp -a -r k8s terraform
   rm -f terraform/variants/current
   ln -s "$VARIANT" terraform/variants/current
+
+  rm -f dns
+  ln -s modules/dns/$DNS_TYPE dns
+  # OSX compat
+  ln -s "$DNS_TYPE" modules/dns/$DNS_TYPE
 }
 
 doTF()
