@@ -107,10 +107,14 @@ module "azuredns_resource_group_name" {
 locals {
   names = "${compact(concat(list(var.name),var.names))}"
 }
+module "active" {
+  source = "../../flag"
+  option = "${var.active}"
+}
 
 resource "azurerm_dns_a_record" "record" {
   provider = "azurerm.azuredns"
-  count    = "${var.active * var.name_count * (1 - signum(var.entry_count))}"  
+  count    = "${module.active.if_active * var.name_count * (1 - signum(var.entry_count))}"  
   zone_name           = "${module.azuredns_zone_name.value}"
   resource_group_name = "${module.azuredns_resource_group_name.value}"
   name     = "${element(local.names,count.index)}"
@@ -119,7 +123,7 @@ resource "azurerm_dns_a_record" "record" {
 }
 resource "azurerm_dns_a_record" "records" {
   provider = "azurerm.azuredns"
-  count    = "${var.active * var.entry_count }"  
+  count    = "${module.active.if_active * var.entry_count }"  
   zone_name           = "${module.azuredns_zone_name.value}"
   resource_group_name = "${module.azuredns_resource_group_name.value}"
   name     = "${var.names[count.index]}"
