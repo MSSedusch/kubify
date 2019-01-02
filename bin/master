@@ -88,7 +88,7 @@ doPrepare()
     VARIANT="$(basename "$(${rlink} -f variant)")"
     if [ \( -d terraform -a ! -h terraform \) -o "$(basename "$(${rlink} variant)")" != "$VARIANT" ]; then
       MODE=copy
-   fi
+    fi
   else
     if [ -n "$1" ]; then
       MODE=copy
@@ -116,7 +116,12 @@ doPrepare()
   if [ ! -d "k8s/variants/$VARIANT" ]; then
     Error "variant '$VARIANT' not found"
   fi
-
+  if [ -z "$DNS_TYPE" ]; then
+    DNS_TYPE="$2"
+  fi
+  if [ ! -d "k8s/modules/dns/$DNS_TYPE" ]; then
+    Error "DNS module '$DNS_TYPE' not found"
+  fi
   if [ -d terraform -a ! -h terraform ]; then
     echo "updating terraform project for $VARIANT"
   else
