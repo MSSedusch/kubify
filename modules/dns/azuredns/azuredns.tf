@@ -96,12 +96,12 @@ provider "azurerm" {
 
 module "azuredns_zone_name" {
   source = "../../configurable"
-  value  = "${lookup(var.config,"zone_name")}"
+  value  = "${lookup(var.config,"az_zone_name")}"
 }
 
 module "azuredns_resource_group_name" {
   source = "../../configurable"
-  value  = "${lookup(var.config,"resource_group_name")}"
+  value  = "${lookup(var.config,"az_resource_group_name")}"
 }
 
 locals {
