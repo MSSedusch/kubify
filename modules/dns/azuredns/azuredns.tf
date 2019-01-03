@@ -49,19 +49,19 @@ variable "active" {
   default = false
 }
 
-variable "azuredns_clientid" {
+variable "azuredns_az_clientid" {
   default = ""
 }
-variable "azuredns_client_secret" {
+variable "azuredns_az_client_secret" {
   default = ""
 }
-variable "azuredns_tenantid" {
+variable "azuredns_az_tenantid" {
   default = ""
 }
-variable "azuredns_subscription_id" {
+variable "azuredns_az_subscription_id" {
   default = ""
 }
-variable "azuredns_region" {
+variable "azuredns_az_region" {
   default = ""
 }
 
@@ -69,11 +69,11 @@ module "azuredns" {
   source = "../../access/azure"
   access_info = "${var.config}"
 
-  client_id = "${var.azuredns_clientid}"
-  client_secret = "${var.azuredns_client_secret}"
-  tenant_id = "${var.azuredns_tenantid}"
-  subscription_id = "${var.azuredns_subscription_id}"
-  region = "${var.azuredns_region}"
+  client_id = "${var.azuredns_az_clientid}"
+  client_secret = "${var.azuredns_az_client_secret}"
+  tenant_id = "${var.azuredns_az_tenantid}"
+  subscription_id = "${var.azuredns_az_subscription_id}"
+  region = "${var.azuredns_az_region}"
 }
 
 module "dns" {
