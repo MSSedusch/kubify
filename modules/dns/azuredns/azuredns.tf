@@ -76,20 +76,16 @@ provider "azurerm" {
   client_secret = "${module.azuredns.client_secret}"  
 }
 
-
-module "azuredns_zone_name" {
-  source = "../../configurable"
-  value  = "${lookup(var.config,"az_zone_name")}"
-}
-
-module "azuredns_resource_group_name" {
-  source = "../../configurable"
-  value  = "${lookup(var.config,"az_resource_group_name")}"
-}
-
 locals {
   names = "${compact(concat(list(var.name),var.names))}"
 }
+
+module "dns_hostedzone" {
+  source = "../../configurable"
+  optional = "${! var.active}"
+  value  = "${lookup(var.config,"hosted_zone_id")}"
+}
+
 module "active" {
   source = "../../flag"
   option = "${var.active}"
@@ -98,8 +94,8 @@ module "active" {
 resource "azurerm_dns_a_record" "record" {
   provider = "azurerm.azuredns"
   count    = "${module.active.if_active * var.name_count * (1 - signum(var.entry_count))}"  
-  zone_name           = "${module.azuredns_zone_name.value}"
-  resource_group_name = "${module.azuredns_resource_group_name.value}"
+  zone_name           = "${replace(module.dns_hostedzone.value, "//subscriptions/([^/]*)/resourceGroups/([^/]*)/providers/([^/]*)/([^/]*)/(.*)/", "$5")}}"
+  resource_group_name = "${replace(module.dns_hostedzone.value, "//subscriptions/([^/]*)/resourceGroups/([^/]*)/providers/([^/]*)/([^/]*)/(.*)/", "$2")}}"
   name     = "${replace(element(local.names,count.index), format(".%s", module.azuredns_zone_name.value), "")}"
   ttl      = "${var.ttl}"
   records  = ["${var.target}"]
@@ -107,8 +103,8 @@ resource "azurerm_dns_a_record" "record" {
 resource "azurerm_dns_a_record" "records" {
   provider = "azurerm.azuredns"
   count    = "${module.active.if_active * var.entry_count }"  
-  zone_name           = "${module.azuredns_zone_name.value}"
-  resource_group_name = "${module.azuredns_resource_group_name.value}"
+  zone_name           = "${replace(module.dns_hostedzone.value, "//subscriptions/([^/]*)/resourceGroups/([^/]*)/providers/([^/]*)/([^/]*)/(.*)/", "$5")}}"
+  resource_group_name = "${replace(module.dns_hostedzone.value, "//subscriptions/([^/]*)/resourceGroups/([^/]*)/providers/([^/]*)/([^/]*)/(.*)/", "$2")}}"
   name     = "${replace(var.names[count.index], format(".%s", module.azuredns_zone_name.value), "")}"
   ttl      = "${var.ttl}"
   records  = ["${element(var.targets,count.index)}"]
