@@ -55,8 +55,8 @@ module "azuredns" {
 
   client_id = "${lookup(var.config,"az_client_id","")}"
   client_secret = "${lookup(var.config,"az_client_secret","")}"
-  tenant_id = "${lookup(var.config,"az_tenantid","")}"
-  subscription_id = "${lookup(var.config,"subscription_id","")}"
+  tenant_id = "${lookup(var.config,"az_tenant_id","")}"
+  subscription_id = "${lookup(var.config,"az_subscription_id","")}"
 }
 
 module "dns" {
