@@ -100,7 +100,7 @@ resource "azurerm_dns_a_record" "record" {
   count    = "${module.active.if_active * var.name_count * (1 - signum(var.entry_count))}"  
   zone_name           = "${module.azuredns_zone_name.value}"
   resource_group_name = "${module.azuredns_resource_group_name.value}"
-  name     = "${replace(format(".%", element(local.names,count.index)), module.azuredns_zone_name.value, "")}"
+  name     = "${replace(format(".%s", element(local.names,count.index)), module.azuredns_zone_name.value, "")}"
   ttl      = "${var.ttl}"
   records  = ["${var.target}"]
 }
@@ -109,7 +109,7 @@ resource "azurerm_dns_a_record" "records" {
   count    = "${module.active.if_active * var.entry_count }"  
   zone_name           = "${module.azuredns_zone_name.value}"
   resource_group_name = "${module.azuredns_resource_group_name.value}"
-  name     = "${replace(format(".%", var.names[count.index]), module.azuredns_zone_name.value, "")}"
+  name     = "${replace(format(".%s", var.names[count.index]), module.azuredns_zone_name.value, "")}"
   ttl      = "${var.ttl}"
   records  = ["${element(var.targets,count.index)}"]
 }
