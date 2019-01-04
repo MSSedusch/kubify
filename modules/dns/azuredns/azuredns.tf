@@ -84,8 +84,8 @@ module "dns_hostedzone" {
 
 locals {
   names = "${compact(concat(list(var.name),var.names))}"
-  azuredns_zone_name="${replace(module.dns_hostedzone.value, "//subscriptions/([^/]*)/resourceGroups/([^/]*)/providers/([^/]*)/([^/]*)/(.*)/", "$5")}}"
-  azuredns_resource_group_name="${replace(module.dns_hostedzone.value, "//subscriptions/([^/]*)/resourceGroups/([^/]*)/providers/([^/]*)/([^/]*)/(.*)/", "$2")}}"
+  azuredns_zone_name="${replace(module.dns_hostedzone.value, "//subscriptions/([^/]*)/resourceGroups/([^/]*)/providers/([^/]*)/([^/]*)/(.*)/", "$5")}"
+  azuredns_resource_group_name="${replace(module.dns_hostedzone.value, "//subscriptions/([^/]*)/resourceGroups/([^/]*)/providers/([^/]*)/([^/]*)/(.*)/", "$2")}"
   domain_name="${lookup(var.config,"domain_name")}"
 }
 
