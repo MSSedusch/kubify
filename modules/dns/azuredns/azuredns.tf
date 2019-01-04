@@ -86,7 +86,6 @@ locals {
   names = "${compact(concat(list(var.name),var.names))}"
   azuredns_zone_name="${replace(module.dns_hostedzone.value, "//subscriptions/([^/]*)/resourceGroups/([^/]*)/providers/([^/]*)/([^/]*)/(.*)/", "$5")}"
   azuredns_resource_group_name="${replace(module.dns_hostedzone.value, "//subscriptions/([^/]*)/resourceGroups/([^/]*)/providers/([^/]*)/([^/]*)/(.*)/", "$2")}"
-  domain_name="${lookup(var.config,"domain_name")}"
 }
 
 
@@ -100,7 +99,7 @@ resource "azurerm_dns_a_record" "record" {
   count    = "${module.active.if_active * var.name_count * (1 - signum(var.entry_count))}"  
   zone_name           = "${local.azuredns_zone_name}"
   resource_group_name = "${local.azuredns_resource_group_name}"
-  name     = "${replace(element(local.names,count.index), format(".%s", local.domain_name), "")}"
+  name     = "${replace(element(local.names,count.index), format(".%s", local.azuredns_zone_name), "")}"
   ttl      = "${var.ttl}"
   records  = ["${var.target}"]
 }
@@ -109,7 +108,7 @@ resource "azurerm_dns_a_record" "records" {
   count    = "${module.active.if_active * var.entry_count }"  
   zone_name           = "${local.azuredns_zone_name}"
   resource_group_name = "${local.azuredns_resource_group_name}"
-  name     = "${replace(var.names[count.index], format(".%s", local.domain_name), "")}"
+  name     = "${replace(var.names[count.index], format(".%s", local.azuredns_zone_name), "")}"
   ttl      = "${var.ttl}"
   records  = ["${element(var.targets,count.index)}"]
 }
